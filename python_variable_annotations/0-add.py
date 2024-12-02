@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-""" type annotation for add function """
 
 
 def add(a: float, b: float) -> float:
+    """ type annotation for add function """
     return a + b
