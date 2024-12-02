@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """Module function for creating a multiplier function."""
 
+
 from typing import Callable
+
 
 def make_multiplier(multiplier: float) -> Callable:
     """
