@@ -2,10 +2,10 @@
 """Module for summing a list of numbers."""
 
 
-from typing import list
+from typing import List
 
 
-def sum_list(input_list: list[float]) -> float:
+def sum_list(input_list: List[float]) -> float:
     """
     Calculate the sum of all elements in a list of numbers.
 

@@ -2,10 +2,10 @@
 """ Module for element length. """
 
 
-from typing import list, tuple
+from typing import List, Tuple
 
 
-def element_length(lst: list[str]) -> list[tuple[str, int]]:
+def element_length(lst: List[str]) -> list[Tuple[str, int]]:
     """
     Calculate the length of each element in a list.
 
