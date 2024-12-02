@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """ Module for element length. """
 
+from typing import list, tuple
 
 def element_length(lst: list[str]) -> list[tuple[str, int]]:
     """

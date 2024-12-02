@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Module for summing a list of numbers."""
 
+from typing import List
 
 def sum_list(input_list: list[float]) -> float:
     """
