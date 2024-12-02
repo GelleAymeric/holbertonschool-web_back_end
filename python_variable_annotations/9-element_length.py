@@ -5,7 +5,7 @@
 from typing import List, Tuple
 
 
-def element_length(lst: List[str]) -> list[Tuple[str, int]]:
+def element_length(lst: List[str]) -> List[Tuple[str, int]]:
     """
     Calculate the length of each element in a list.
 
