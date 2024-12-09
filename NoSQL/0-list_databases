@@ -1,1 +1,2 @@
+// display lists all Dbs in Mongodb
 show dbs
