@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
-"""Measure the runtime of async_comprehension four times in parallel"""
+"""Measure the runtime"""
 
 import asyncio
-from time import time
+import time
+
+
 async_comprehension = __import__('1-async_comprehension').async_comprehension
 
 
