@@ -1,6 +1,6 @@
 const fs = require('fs').promises;
 
-function countStudents(path) {
+async function countStudents(path) {
   return fs.readFile(path, 'utf8')
     .then((data) => {
       // Split the data into lines and filter out empty lines
