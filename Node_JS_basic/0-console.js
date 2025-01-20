@@ -1,9 +1,4 @@
 /**
- * @param {string} message - message to be displayed
- * 
- **/
-
-/**
  * Logs the provided message to the console.
  * @param {string} message - The message to be displayed.
  */
