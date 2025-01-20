@@ -12,6 +12,6 @@ process.stdin.on('data', (data) => {
   console.log(`Your name is: ${name}`);
   // Inform the user that the software is closing
   console.log('This important software is now closing');
-  // Exit the Node.js process
-  process.exit();
+  // End the input stream
+  process.stdin.end();
 });
