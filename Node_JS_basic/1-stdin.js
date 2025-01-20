@@ -8,10 +8,14 @@ process.stdout.write('Welcome to Holberton School, what is your name?\n');
 process.stdin.on('readable', () => {
   // Read the input from the user
   const name = process.stdin.read();
-  // Display the user's name
-  process.stdout.write(`Your name is: ${name}`);
+  if (name) {
+    // Display the user's name
+    process.stdout.write(`Your name is: ${name}`);
+  }
+});
+
+// Listen for the end of the input stream
+process.stdin.on('end', () => {
   // Inform the user that the software is closing
   process.stdout.write('This important software is now closing\n');
-  // Exit the Node.js process
-  process.exit();
 });
