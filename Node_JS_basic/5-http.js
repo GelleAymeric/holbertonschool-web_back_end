@@ -1,68 +1,84 @@
 const http = require('http');
-const fs = require('fs');
+const fs = require('fs').promises;
 
-// Create an HTTP server
-const app = http.createServer((req, res) => {
-  res.setHeader('Content-Type', 'text/plain');
+// Function to process the CSV file asynchronously
+async function countStudents(path) {
+  try {
+    // Read the file asynchronously
+    const data = await fs.readFile(path, 'utf-8');
 
-  // Handle root URL path
-  if (req.url === '/') {
-    res.statusCode = 200;
-    res.end('Hello Holberton School!\n');
-  } else if (req.url === '/students') { // Handle /students URL path
-    const database = process.argv[2];
+    // Split the data into lines and filter out empty lines
+    const lines = data.split('\n').filter((line) => line.trim() !== '');
 
-    // Check if the database argument is provided
-    if (!database) {
-      res.statusCode = 500;
-      res.end('This is the list of our students\nCannot load the database');
-      return;
+    // Check that there is at least one header line
+    if (lines.length <= 1) {
+      throw new Error('Cannot load the database');
     }
 
-    // Read the database file
-    fs.readFile(database, 'utf8', (err, data) => {
-      if (err) {
-        res.statusCode = 500;
-        res.end('This is the list of our students\nCannot load the database');
-        return;
-      }
+    // Extract student data, ignoring the header
+    const studentData = lines.slice(1);
 
-      // Split the file content into lines and filter out empty lines
-      const lines = data.split('\n').filter((line) => line.trim() !== '');
-      // Ignore the first line (header) and get the student data
-      const students = lines.slice(1);
+    // Create a map to count students by field
+    const fields = {};
+    studentData.forEach((line) => {
+      const [firstname, , , field] = line.split(',');
 
-      const fields = {};
-      // Process each student line
-      students.forEach((student) => {
-        const [firstname, , , field] = student.split(',');
+      // Ignore invalid or incomplete lines
+      if (firstname && field) {
         if (!fields[field]) {
           fields[field] = [];
         }
         fields[field].push(firstname);
-      });
-
-      // Build the response string
-      let response = 'This is the list of our students\n';
-      response += `Number of students: ${students.length}\n`;
-
-      // Add the number of students in each field to the response
-      for (const [field, names] of Object.entries(fields)) {
-        response += `Number of students in ${field}: ${names.length}. List: ${names.join(', ')}\n`;
       }
-
-      res.statusCode = 200;
-      res.end(response);
     });
-  } else { // Handle unknown routes
+
+    // Calculate and display the total number of students
+    const totalStudents = Object.values(fields).reduce((acc, curr) => acc + curr.length, 0);
+    let response = `Number of students: ${totalStudents}\n`;
+
+    // Display the number of students per field and their names
+    for (const [field, students] of Object.entries(fields)) {
+      response += `Number of students in ${field}: ${students.length}. List: ${students.join(', ')}\n`;
+    }
+
+    return response;
+  } catch (err) {
+    throw new Error('Cannot load the database');
+  }
+}
+
+// Create the HTTP server
+const app = http.createServer(async (req, res) => {
+  const url = req.url;
+
+  res.statusCode = 200;
+  res.setHeader('Content-Type', 'text/plain');
+
+  if (url === '/') {
+    res.end('Hello Holberton School!\n');
+  } else if (url === '/students') {
+    const dbFile = process.argv[2];
+
+    if (!dbFile) {
+      res.end('Cannot load the database\n');
+      return;
+    }
+
+    try {
+      const studentsList = await countStudents(dbFile);
+      res.end(`This is the list of our students\n${studentsList}`);
+    } catch (error) {
+      res.end('Cannot load the database\n');
+    }
+  } else {
     res.statusCode = 404;
     res.end('Not Found\n');
   }
 });
 
-// Start the server and listen on port 1245
+// The server listens on port 1245
 app.listen(1245, () => {
-  console.log('Server is running on port 1245');
+  console.log('Server running at http://localhost:1245/');
 });
 
 // Export the app
