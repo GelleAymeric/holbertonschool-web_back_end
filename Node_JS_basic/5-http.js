@@ -49,7 +49,7 @@ async function countStudents(path) {
 
 // Create the HTTP server
 const app = http.createServer(async (req, res) => {
-  const url = req.url;
+  const { url } = req; // Use object destructuring
 
   res.statusCode = 200;
   res.setHeader('Content-Type', 'text/plain');
