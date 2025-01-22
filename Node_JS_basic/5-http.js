@@ -1,29 +1,29 @@
 const http = require('http');
 const fs = require('fs').promises;
 
-// Function to process the CSV file asynchronously
+// Fonction pour traiter le fichier CSV de manière asynchrone
 async function countStudents(path) {
   try {
-    // Read the file asynchronously
+    // Lire le fichier de manière asynchrone
     const data = await fs.readFile(path, 'utf-8');
 
-    // Split the data into lines and filter out empty lines
+    // Diviser les données en lignes et filtrer les lignes vides
     const lines = data.split('\n').filter((line) => line.trim() !== '');
 
-    // Check that there is at least one header line
+    // Vérifier qu'il y a au moins une ligne d'en-tête
     if (lines.length <= 1) {
       throw new Error('Cannot load the database');
     }
 
-    // Extract student data, ignoring the header
+    // Extraire les données des étudiants en ignorant l'en-tête
     const studentData = lines.slice(1);
 
-    // Create a map to count students by field
+    // Créer une carte pour compter les étudiants par domaine
     const fields = {};
     studentData.forEach((line) => {
       const [firstname, , , field] = line.split(',');
 
-      // Ignore invalid or incomplete lines
+      // Ignorer les lignes invalides ou incomplètes
       if (firstname && field) {
         if (!fields[field]) {
           fields[field] = [];
@@ -32,11 +32,11 @@ async function countStudents(path) {
       }
     });
 
-    // Calculate and display the total number of students
+    // Calculer et afficher le nombre total d'étudiants
     const totalStudents = Object.values(fields).reduce((acc, curr) => acc + curr.length, 0);
     let response = `Number of students: ${totalStudents}\n`;
 
-    // Display the number of students per field and their names
+    // Afficher le nombre d'étudiants par domaine et leurs noms
     for (const [field, students] of Object.entries(fields)) {
       response += `Number of students in ${field}: ${students.length}. List: ${students.join(', ')}\n`;
     }
@@ -47,7 +47,7 @@ async function countStudents(path) {
   }
 }
 
-// Create the HTTP server
+// Créer le serveur HTTP
 const app = http.createServer(async (req, res) => {
   const url = req.url;
 
@@ -76,10 +76,10 @@ const app = http.createServer(async (req, res) => {
   }
 });
 
-// The server listens on port 1245
+// Le serveur écoute sur le port 1245
 app.listen(1245, () => {
   console.log('Server running at http://localhost:1245/');
 });
 
-// Export the app
+// Exporter l'application
 module.exports = app;
