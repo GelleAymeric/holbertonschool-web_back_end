@@ -10,6 +10,7 @@ const port = 1245;
 
 // Define a route handler for the root URL path
 app.get('/', (req, res) => {
+  // Send a response with the text 'Hello Holberton School!'
   res.send('Hello Holberton School!');
 });
 
